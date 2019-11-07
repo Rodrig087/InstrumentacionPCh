@@ -22,8 +22,6 @@ contador = 0
 while (True):
 	contador = contador+1
 	client.publish(topic="Contador", payload=contador, qos=1, retain=False)
-	print(contador)
 	time.sleep(1)
 	client.loop_start()
 	client.loop_stop()
-

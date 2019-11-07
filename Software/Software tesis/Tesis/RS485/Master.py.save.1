@@ -1,0 +1,61 @@
+#Envia una trama de peticion por medio de RS485, recibe la respuesta e imprime el dato de medicion
+
+import serial
+import binascii
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
+port.close()
+port.open()
+time.sleep(1)
+
+Hdr = chr(58)	#Delimitador de inicio de trama (0x3A)
+End = chr(13)	#Delimitador de fin de trama (0x0D)
+Id = chr(1)	#Identificador de esclavo (0x01)
+Fcn = chr(5)	#Tipo de funcion
+D1 = chr(1)	#0x01
+D2 = chr(14)	#0x0E
+
+Ptcn = [Hdr, Id, Fcn, D1, D2, End]	#Trama de peticion
+
+EE=18
+GPIO.setup(EE, GPIO.OUT, initial=0)	#Establece el GPIO 18 como salida
+
+
+#Funcion para recuperar y contenar datos de la trama de respuesta
+def makeValue(highbyte, lowbyte):
+	print int(highbyte, 16)*256 + int(lowbyte, 16)
+
+
+try:
+	while True:
+	
+		GPIO.output(EE,1)	#Establece el max485 en modo de escritura
+		time.sleep(0.5)
+		for i in range(6):
+			port.write(Ptcn[i])
+		port.flush()
+		time.sleep(0.005)
+		GPIO.output(EE,0)	#Establece el max485 en modo de lectura
+		time.slez
+		rcv = port.read(port.inWaiting())
+#		if rcv == chr(58):
+#			print "llego"
+#			Rspt = port.read(5)
+#			R1=Rspt[2]
+#       		R2=Rspt[3]
+#			one = binascii.hexlify(R1)
+#       		two = binascii.hexlify(R2)
+#			makeValue(one,two)
+#		else:
+#			print "Esclavo no responde"
+
+		print (rcv)
+		
+		
+except KeyboardInterrupt:
+        GPIO.cleanup()
+	port.close()
+

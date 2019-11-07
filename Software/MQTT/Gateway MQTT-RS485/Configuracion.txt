@@ -1,0 +1,65 @@
+
+Archivo de configuracion:
+	Ruta:
+		/etc/mosquitto/mosquitto.conf
+
+Inicio del broker Mosquitto:
+	-Inicio automatico al encender la RPi:
+		sudo systemctl enable mosquitto
+	-Comprobar estado del broker:
+		sudo systemctl status mosquitto
+	-Inicio en background
+		mosquitto -d
+	-Inicio en modo detallado:
+		mosquitto -v
+	-Inicio en puerto diferente al 1883:
+		mosquitto -p 1884
+	-Reiniciar mosquitto:
+		sudo systemctl restart mosquitto
+		
+Detener broker:
+	-Comandos:
+		sudo service mosquitto stop
+		sudo systemctl stop mosquitto.service
+
+Configuracion de usuarios y contraseñas:
+	-Comando: 
+		sudo mosquitto_passwd -c /etc/mosquitto/passwd usuarioprueba
+	-Parametros configurados:
+		Usuario 1: gateway1
+		Pass: smapfcgw1
+		
+Configuracion de broker modo bridge:
+    -Broker remoto: 
+	   host: m11.cloudmqtt.com:10164
+	   username: cuxhjixd
+	   password: tFroIaJunMc6
+	
+#connection <name>
+	
+connection bridge-01
+address m11.cloudmqtt.com:10164
+
+topic # out 1 "" ""
+topic # in 1 "" "" 	
+
+Usuario y contraseña:?
+allow_anonymous false
+password_file /etc/mosquitto/passBrokerRemoto.txt
+
+
+****************************************
+# External MQTT Broker
+connection external-bridge
+address <external_ip_address_broker>
+topic # in
+remote_username <username>
+remote_password <password>
+****************************************
+# External MQTT Broker
+connection bridge-01
+address m11.cloudmqtt.com:10164
+topic # out 1
+topic # in 1
+remote_username cuxhjixd
+remote_password tFroIaJunMc6

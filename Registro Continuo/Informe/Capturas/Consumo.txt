@@ -1,7 +1,0 @@
-Voltaje = 12V
-Corriente arranque = 230mA
-Corriente promedio = 200mA
-Potencia promedio = 2.4W
-
-Bateria = 6V/4Ah = 24Wh
-Duracion = 10h
